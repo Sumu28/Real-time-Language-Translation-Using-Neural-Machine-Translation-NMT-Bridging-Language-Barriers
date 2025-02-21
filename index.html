@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Speech Translator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function translateSpeech() {
+            document.getElementById("status").innerText = "Listening...";
+            let sourceLang = document.getElementById("sourceLang").value;
+            let targetLangs = Array.from(document.querySelectorAll('#targetLangs option:checked')).map(e => e.value);
+
+            fetch('/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ source_lang: sourceLang, target_langs: targetLangs })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("status").innerText = "Translation Completed!";
+                document.getElementById("original").innerText = "You said: " + data.original;
+                
+                let translations = "";
+                for (let lang in data.translations) {
+                    translations += `
+                        <div class="translation">
+                            <p><strong>${lang.toUpperCase()}:</strong> ${data.translations[lang]}</p>
+                            <button class="play-btn" onclick="playTranslation('${data.translations[lang]}')">🔊 Play</button>
+                            <button class="download-btn" onclick="downloadAudio('${data.translations[lang]}', '${lang}')">⬇ Download</button>
+                        </div>
+                    `;
+                }
+                document.getElementById("translations").innerHTML = translations;
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        function playTranslation(text) {
+            let speech = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(speech);
+        }
+
+        function downloadAudio(text, lang) {
+            fetch('/download-audio', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text, lang: lang })
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                let url = window.URL.createObjectURL(blob);
+                let a = document.createElement("a");
+                a.href = url;
+                a.download = "translation.mp3";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            })
+            .catch(error => console.error("Error downloading audio:", error));
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>🎤 Real-Time Speech Translator 🌍</h2>
+
+        <div class="dropdown-container">
+            <label for="sourceLang">Select Source Language:</label>
+            <select id="sourceLang">
+                <option value="en">English</option>
+                <option value="kn">Kannada</option>
+                <option value="hi">Hindi</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="fr">French</option>
+                <option value="es">Spanish</option>
+            </select>
+
+            <label for="targetLangs">Select Target Languages:</label>
+            <select id="targetLangs" multiple>
+                <option value="en">English</option>
+                <option value="kn">Kannada</option>
+                <option value="hi">Hindi</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="fr">French</option>
+                <option value="es">Spanish</option>
+            </select>
+        </div>
+
+        <button class="start-btn" onclick="translateSpeech()">🎤 Start Listening</button>
+        <p id="status" class="status">Press the button and speak</p>
+        <p id="original" class="original-text"></p>
+        <div id="translations" class="translations"></div>
+    </div>
+</body>
+</html>
