@@ -1,0 +1,37 @@
+
+---
+
+## 🧠 What I Learned
+- Implemented cutting-edge **Neural Machine Translation (NMT)** models to handle multilingual translation tasks.  
+- Optimised for **real-time usage**, balancing translation quality and speed.  
+- Built an integration pipeline from text (or speech) input → preprocessing → model inference → translated output.  
+- Applied **evaluation metrics** (BLEU, latency, error analysis) to measure translation performance.  
+- Gained hands-on experience in model deployment, API design, and multilingual data handling.
+
+---
+
+## 📈 Results
+| Metric         | Value (example)     |
+|----------------|---------------------|
+| BLEU Score     | 32.5 (English→Spanish) |
+| Latency        | ~120 ms per sentence |
+| Languages Supported | 3 (English, Spanish, French) |
+
+*(Update these numbers with your actual results.)*
+
+---
+
+## 🧩 Usage
+```bash
+# Clone the repository
+git clone https://github.com/Sumu28/Real-time-Language-Translation-Using-Neural-Machine-Translation-NMT-Bridging-Language-Barriers.git
+cd Real-time-Language-Translation-Using-Neural-Machine-Translation-NMT-Bridging-Language-Barriers
+
+# Create virtual environment & install dependencies
+python -m venv venv
+source venv/bin/activate      # On macOS/Linux
+# venv\Scripts\activate        # On Windows
+pip install -r requirements.txt
+
+# Run the translation interface
+python app.py                  # or streamlit run app.py as applicable
