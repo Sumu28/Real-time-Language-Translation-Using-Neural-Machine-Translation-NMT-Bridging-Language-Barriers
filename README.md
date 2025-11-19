@@ -20,6 +20,4 @@ This project focuses on building a **real-time translation system** using Neural
 - **Deployment / Interface:** Streamlit / Flask / REST API (or whichever you used)  
 - **Data & Datasets:** Public bilingual corpora (e.g., English↔Spanish, English↔French) and/or custom dataset.
 
----
 
-## 📂 Folder Structure
